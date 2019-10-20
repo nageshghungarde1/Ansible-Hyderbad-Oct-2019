@@ -1,0 +1,31 @@
+$ sudo yum install wget -y
+$ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+$ yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+$ sudo rpm -i epel-release-latest-7.noarch.rpm
+$ sudo yum update -y
+$ sudo yum install ansible -y
+$ systemctl stop firewalld
+$ systemctl disable firewalld
+
+#Ansible on localhost
+ansible localhost -m file -a"name=index.html state=touch"
+ansible localhost -m lineinfile -a'path=index.html state=present line="
+
+Welcome to Nagesh DevOpsSchol.com
+"'
+ansible localhost -m copy -a"dest=/var/www/html/index.html src=index.html"
+ansible localhost -m service -a"name=httpd state=started"
+vi /etc/ansible/ansible.cfg
+vi /etc/ansible/ansible.cfg
+#Ansible on remote host 15.206.82.13
+
+wget https://www.devopsschool.com/notes/docker/2019/rajesh-mumbai.pem
+chmod 600 rajesh-mumbai.pem
+ansible all -i 15.206.82.13, -m yum -a"name=httpd state=present" -u ec2-user --key-file=rajesh-mumbai.pem -b
+ansible all -i 15.206.82.13, -m file -a"name=index.html state=touch" -u ec2-user --key-file=rajesh-mumbai.pem -b
+ansible all -i 15.206.82.13, -m lineinfile -a'path=index.html state=present line="
+
+Welcome all to Nagesh DevOpsSchol.com
+"' -u ec2-user --key-file=rajesh-mumbai.pem -b
+ansible all -i 15.206.82.13, -m copy -a"dest=/var/www/html/index.html src=index.html" -u ec2-user --key-file=rajesh-mumbai.pem -b
+ansible all -i 15.206.82.13, -m service -a"name=httpd state=started" -u ec2-user --key-file=rajesh-mumbai.pem -b
