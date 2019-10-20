@@ -1,0 +1,145 @@
+Install Ansible
+
+$ sudo yum install wget -y
+$ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+$ yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+$ sudo rpm -i epel-release-latest-7.noarch.rpm
+$ sudo yum update -y
+$ sudo yum install ansible -y
+$ systemctl stop firewalld
+$ systemctl disable firewalld
+
+#Ansible on localhost
+ansible localhost -m file -a"name=index.html state=touch"
+ansible localhost -m lineinfile -a'path=index.html state=present line="
+
+Welcome to Nagesh DevOpsSchol.com
+"'
+ansible localhost -m copy -a"dest=/var/www/html/index.html src=index.html"
+ansible localhost -m service -a"name=httpd state=started"
+vi /etc/ansible/ansible.cfg
+vi /etc/ansible/ansible.cfg
+#Ansible on remote host 15.206.82.13
+
+wget https://www.devopsschool.com/notes/docker/2019/rajesh-mumbai.pem
+chmod 600 rajesh-mumbai.pem
+ansible all -i 15.206.82.13, -m yum -a"name=httpd state=present" -u ec2-user --key-file=rajesh-mumbai.pem -b
+ansible all -i 15.206.82.13, -m file -a"name=index.html state=touch" -u ec2-user --key-file=rajesh-mumbai.pem -b
+ansible all -i 15.206.82.13, -m lineinfile -a'path=index.html state=present line=""' -u ec2-user --key-file=rajesh-mumbai.pem -b
+
+Welcome all to Nagesh DevOpsSchol.com[ec2-user@ip-172-31-27-215 ~]$ cat inventory
+
+ansible all -i 15.206.82.13, -m copy -a"dest=/var/www/html/index.html src=index.html" -u ec2-user --key-file=rajesh-mumbai.pem -b
+ansible all -i 15.206.82.13, -m service -a"name=httpd state=started" -u ec2-user --key-file=rajesh-mumbai.pem -b
+
+writing playbook
+
+create an inventory file
+you can mention the host/IP and group them with below syntax
+
+#13.234.34.62
+#13.233.174.150
+
+#13.233.148.129
+#13.234.118.72
+
+[web]
+15.206.82.13
+52.66.197.25
+
+
+ansible all -i inventory -m yum -a"name=httpd state=present" -u ec2-user --key-file=rajesh-mumbai.pem -b
+sudo ansible all -i inventory -m yum -a"name=httpd state=present" -u ec2-user --key-file=rajesh-mumbai.pem -b
+sudo ansible all -i inventory -m file -a"name=index.html state=touch" -u ec2-user --key-file=rajesh-mumbai.pem -b
+sudo ansible all -i inventory -m lineinfile -a'path=index.html state=present line="<h1> Welcome all to DevOpsSchol.com</h1>"' -u ec2-user --key-file=rajesh-mumbai.pem -b
+sudo ansible all -i inventory -m copy -a"dest=/var/www/html/index.html src=index.html" -u ec2-user --key-file=rajesh-mumbai.pem -b
+sudo ansible all -i inventory -m service -a"name=httpd state=started" -u ec2-user --key-file=rajesh-mumbai.pem -b
+
+ansible playbook
+vi web.yaml
+
+---
+- name: This sets up an httpd webserver
+  hosts: web
+  vars:
+    myname: "nagesh from Playbook"
+    package: "httpd"
+    service: "httpd"
+
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ service }}
+  - name: start the httpd service
+    service: name={{ package }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/home/ec2-user/index.html"
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+
+...
+
+ansible-playbook  -i inventory web.yaml -u ec2-user --key-file=rajesh-mumbai.pem -b
+sudo ansible-playbook  -i inventory web.yaml -u ec2-user --key-file=rajesh-mumbai.pem -b
+ 
+ 
+ [ec2-user@ip-172-31-27-215 ~]$ sudo ansible-playbook  -i inventory web.yaml -u ec2-user --key-file=rajesh-mumbai.pem -b
+
+PLAY [This sets up an httpd webserver] **************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ******************************************************************************************************************************************************************************
+ok: [15.206.82.13]
+ok: [52.66.197.25]
+
+TASK [Install the httpd apps] ***********************************************************************************************************************************************************************
+ok: [15.206.82.13]
+ok: [52.66.197.25]
+
+TASK [start the httpd service] **********************************************************************************************************************************************************************
+ok: [15.206.82.13]
+ok: [52.66.197.25]
+
+TASK [create a empty fle] ***************************************************************************************************************************************************************************
+changed: [15.206.82.13]
+changed: [52.66.197.25]
+
+TASK [copy a file] **********************************************************************************************************************************************************************************
+changed: [15.206.82.13]
+changed: [52.66.197.25]
+
+TASK [Ansible prompt example.] **********************************************************************************************************************************************************************
+ok: [15.206.82.13] => {
+    "msg": "nagesh from Playbook"
+}
+ok: [52.66.197.25] => {
+    "msg": "nagesh from Playbook"
+}
+
+PLAY RECAP ******************************************************************************************************************************************************************************************
+15.206.82.13               : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+52.66.197.25               : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+WHAT IS DEVOPS
+================
+https://www.youtube.com/watch?v=-VaVmb_UOC8
+
+Slides
+http://devopsschool.com/slides/ansible
+Videos
+https://devopsschool.com/lms
+Quiz
+https://devopsschool.com/lms
+PDf 
+https://www.devopsschool.com/pdf/ansible/
+Notes
+https://www.devopsschool.com/notes
+Sample Program
+https://github.com/orgs/devopsschool-sample-projects/dashboard
+https://github.com/devops-school
+Tutorials
+https://devopsschool.com/tutorial/ansible/
+Blog
+https://www.devopsschool.com/blog/category/ansible/
